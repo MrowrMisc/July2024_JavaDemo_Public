@@ -14,7 +14,8 @@ class GameEntityFactory : EntityFactory {
     @Spawns("player")
     fun newPlayer(data: SpawnData): Entity {
         val paint = data.get<Paint?>("paint") ?: Color.MAGENTA
-        val playerComponent = PlayerComponent(paint)
+        val name = data.get<String?>("name") ?: "Player"
+        val playerComponent = PlayerComponent(name, paint)
         return entityBuilder()
             .type(EntityType.PLAYER)
             .viewWithBBox(playerComponent.rectangle)

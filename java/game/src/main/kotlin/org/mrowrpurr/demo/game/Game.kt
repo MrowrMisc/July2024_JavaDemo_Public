@@ -22,8 +22,8 @@ class Game : GameApplication() {
         getGameWorld().addEntityFactory(GameEntityFactory())
 
         // Test adding some characters!
-        val player1 = spawn("player", SpawnData().put("paint", Color.BLUE))
-        val player2 = spawn("player", SpawnData().put("paint", Color.RED))
+        val player1 = spawn("player", SpawnData().put("paint", Color.BLUE).put("name", "Ralph"))
+        val player2 = spawn("player", SpawnData().put("paint", Color.RED).put("name", "Alice"))
 
         player1.transformComponent.setPosition(100.0, 100.0)
         player2.transformComponent.setPosition(200.0, 200.0)
