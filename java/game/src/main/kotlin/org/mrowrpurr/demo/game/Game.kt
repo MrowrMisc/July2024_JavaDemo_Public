@@ -2,9 +2,7 @@ package org.mrowrpurr.demo.game
 
 import com.almasb.fxgl.app.GameApplication
 import com.almasb.fxgl.app.GameSettings
-import com.almasb.fxgl.dsl.getGameWorld
-import com.almasb.fxgl.dsl.getInput
-import com.almasb.fxgl.dsl.spawn
+import com.almasb.fxgl.dsl.*
 import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.SpawnData
 import com.almasb.fxgl.input.UserAction
@@ -25,14 +23,19 @@ class Game : GameApplication() {
 
     override fun initGame() {
         println("Game is starting")
+
+        entityBuilder().buildScreenBoundsAndAttach(20.0)
+
+        getPhysicsWorld().setGravity(0.0, 800.0) // 10 pixels per second squared
+
         getGameWorld().addEntityFactory(GameEntityFactory())
 
         // Test adding some characters!
         val player1 = spawn("player", SpawnData().put("paint", Color.BLUE).put("name", "Ralph"))
-        val player2 = spawn("player", SpawnData().put("paint", Color.RED).put("name", "Alice"))
+//        val player2 = spawn("player", SpawnData().put("paint", Color.RED).put("name", "Alice"))
 
         player1.transformComponent.setPosition(100.0, 100.0)
-        player2.transformComponent.setPosition(200.0, 200.0)
+//        player2.transformComponent.setPosition(200.0, 200.0)
 
         firstEntity = player1
 
@@ -51,8 +54,12 @@ class Game : GameApplication() {
         val leftInput = object : UserAction("Move Left") {
             override fun onAction() { firstEntity.getComponent(PlayerComponent::class.java).left() }
         }
+        val upInput = object : UserAction("Move Up") {
+            override fun onAction() { firstEntity.getComponent(PlayerComponent::class.java).jump() }
+        }
         getInput().addAction(rightInput, KeyCode.D)
         getInput().addAction(leftInput, KeyCode.A)
+        getInput().addAction(upInput, KeyCode.SPACE)
     }
 }
 
