@@ -1,14 +1,25 @@
 package org.mrowrpurr.demo.websocketserver
 
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.web.socket.CloseStatus
 import org.springframework.web.socket.TextMessage
 import org.springframework.web.socket.WebSocketSession
 import org.springframework.web.socket.handler.TextWebSocketHandler
 
-class WebsocketMessageHandler : TextWebSocketHandler() {
+// TODO... when a NEW SESSION connects... track it as an UNKNOWN type... THEN listen for a message that identifies it... ...
+
+class WebsocketMessageHandler(private val redis: RedisService) : TextWebSocketHandler() {
+
+    init {
+        println("WebsocketMessageHandler created")
+        println("Can we talk to redis?")
+        redis.setValue("test", "value")
+    }
+
     // TODO: Admin GUI and Game should identify themselves (using secrets)
     //       and we should treat all the other connections as clients (and not trust them! or broadcast to them)
 
+//    public val sessionIds: Map<>
     private val sessions = mutableListOf<WebSocketSession>()
 
     override fun handleTextMessage(session: WebSocketSession, message: TextMessage) {
