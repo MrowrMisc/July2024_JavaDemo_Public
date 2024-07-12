@@ -47,9 +47,25 @@ class GameWebsocketClient(serverUri: URI) : WebSocketClient(serverUri) {
                 return
             }
 
-            // Else this should be from a valid player...
-            val action = json["action"] as String
-            println("Parsed Action: $action")
+            val identifier = json.getOrDefault("identifier", null) as String?
+            if (identifier == null) {
+                println("No identifier found in message: $json")
+                return
+            }
+
+            val action = json.getOrDefault("action", null) as String?
+            if (action == null) {
+                println("No action found in message: $json")
+                return
+            }
+
+            val data = json.getOrDefault("data", null) as Map<*, *>?
+            if (data == null) {
+                println("No data found in message: $json")
+                return
+            }
+
+            handlePlayerAction(UUID.fromString(identifier), action, data)
 
         } catch (e: JsonParseException) {
             println("Error parsing JSON: $e")
@@ -71,5 +87,19 @@ class GameWebsocketClient(serverUri: URI) : WebSocketClient(serverUri) {
     override fun connect() {
         println("Connecting to server: $uri")
         super.connect()
+    }
+
+    private var playerActionCallback: ((UUID, String, Map<*, *>) -> Unit)? = null
+
+    fun registerPlayerActionCallback(callback: (UUID, String, Map<*, *>) -> Unit) {
+        playerActionCallback = callback
+    }
+
+    private fun handlePlayerAction(identifier: UUID, action: String, data: Map<*, *>) {
+        if (playerActionCallback == null) {
+            println("No player action callback registered")
+            return
+        }
+        playerActionCallback?.invoke(identifier, action, data)
     }
 }

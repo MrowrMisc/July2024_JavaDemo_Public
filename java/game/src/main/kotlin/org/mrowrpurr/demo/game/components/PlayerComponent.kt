@@ -22,11 +22,11 @@ class PlayerComponent(private val name: String, private val paint: Paint = Color
 
     fun left() { entity.translateX(-velocity); physics.velocityX = -150.0 }
     fun right() { entity.translateX(velocity); physics.velocityX = 150.0 }
-
+    fun stop() { physics.velocityX = 0.0 }
     fun jump() {
         if (physics.isOnGround) {
             entity.translateY(-velocity)
-            physics.velocityY = -300.0
+            physics.velocityY = -500.0
         }
     }
 }
