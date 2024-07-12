@@ -24,7 +24,7 @@ class Game : GameApplication() {
     }
 
     override fun onUpdate(tpf: Double) {
-        println("Game loop")
+//        println("Game loop")
     }
 }
 
