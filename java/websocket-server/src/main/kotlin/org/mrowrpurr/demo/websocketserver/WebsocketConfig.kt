@@ -10,9 +10,9 @@ import org.springframework.web.socket.config.annotation.WebSocketHandlerRegistry
 @EnableWebSocket
 class WebsocketConfig : WebSocketConfigurer {
     @Autowired
-    private lateinit var redis: RedisService
+    private lateinit var messageHandler: WebsocketMessageHandler
 
     override fun registerWebSocketHandlers(registry: WebSocketHandlerRegistry) {
-        registry.addHandler(WebsocketMessageHandler(redis), "/ws")
+        registry.addHandler(messageHandler, "/ws")
     }
 }
