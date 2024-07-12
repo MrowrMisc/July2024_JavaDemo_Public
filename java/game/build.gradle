@@ -45,6 +45,9 @@ dependencies {
     // https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket
     implementation group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.5.7'
 
+    // https://mvnrepository.com/artifact/org.slf4j/slf4j-simple
+    implementation group: 'org.slf4j', name: 'slf4j-simple', version: '2.0.13'
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
