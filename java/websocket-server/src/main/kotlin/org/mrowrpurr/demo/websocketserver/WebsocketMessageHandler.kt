@@ -83,6 +83,31 @@ class WebsocketMessageHandler(
         if (identifier == null) {
             if (action == "identify") actionIdentify(session, message)
             else println("[MessageHandler] Message from unidentified source: $message")
+            return
+        }
+
+        val uuid = UUID.fromString(identifier)
+        if (!uuidsToVerifiedRoles.containsKey(uuid)) {
+            println("[MessageHandler] Unverified identifier: $identifier")
+            return
+        }
+
+        val role = uuidsToVerifiedRoles[uuid]
+        if (role == "player") {
+            if (gameSession == null) {
+                println("[MessageHandler] Game session not established")
+                return
+            } else {
+                println("[MessageHandler] Sending message to game session...")
+                gameSession!!.sendMessage(TextMessage(jacksonObjectMapper.writeValueAsString(message)))
+            }
+            if (adminSession == null) {
+                println("[MessageHandler] Admin session not established")
+                return
+            } else {
+                println("[MessageHandler] Sending message to admin session...")
+                adminSession!!.sendMessage(TextMessage(jacksonObjectMapper.writeValueAsString(message)))
+            }
         }
     }
 
