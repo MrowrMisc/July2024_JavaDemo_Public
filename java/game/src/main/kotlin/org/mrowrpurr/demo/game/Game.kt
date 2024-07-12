@@ -3,13 +3,19 @@ package org.mrowrpurr.demo.game
 import com.almasb.fxgl.app.GameApplication
 import com.almasb.fxgl.app.GameSettings
 import com.almasb.fxgl.dsl.getGameWorld
+import com.almasb.fxgl.dsl.getInput
 import com.almasb.fxgl.dsl.spawn
+import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.SpawnData
+import com.almasb.fxgl.input.UserAction
+import javafx.scene.input.KeyCode
 import javafx.scene.paint.Color
+import org.mrowrpurr.demo.game.components.PlayerComponent
 import java.net.URI
 
 class Game : GameApplication() {
     private lateinit var wsClient: GameWebsocketClient
+    private lateinit var firstEntity: Entity
 
     override fun initSettings(settings: GameSettings) {
         settings.width = 800
@@ -28,12 +34,25 @@ class Game : GameApplication() {
         player1.transformComponent.setPosition(100.0, 100.0)
         player2.transformComponent.setPosition(200.0, 200.0)
 
+        firstEntity = player1
+
         wsClient = GameWebsocketClient(URI("ws://localhost:8080/ws"))
         wsClient.connect()
     }
 
     override fun initUI() {
         println("UI is starting")
+    }
+
+    override fun initInput() {
+        val rightInput = object : UserAction("Move Right") {
+            override fun onAction() { firstEntity.getComponent(PlayerComponent::class.java).right() }
+        }
+        val leftInput = object : UserAction("Move Left") {
+            override fun onAction() { firstEntity.getComponent(PlayerComponent::class.java).left() }
+        }
+        getInput().addAction(rightInput, KeyCode.D)
+        getInput().addAction(leftInput, KeyCode.A)
     }
 }
 
