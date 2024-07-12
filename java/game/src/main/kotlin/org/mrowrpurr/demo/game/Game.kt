@@ -2,6 +2,10 @@ package org.mrowrpurr.demo.game
 
 import com.almasb.fxgl.app.GameApplication
 import com.almasb.fxgl.app.GameSettings
+import com.almasb.fxgl.dsl.getGameWorld
+import com.almasb.fxgl.dsl.spawn
+import com.almasb.fxgl.entity.SpawnData
+import javafx.scene.paint.Color
 import java.net.URI
 
 class Game : GameApplication() {
@@ -15,16 +19,21 @@ class Game : GameApplication() {
 
     override fun initGame() {
         println("Game is starting")
+        getGameWorld().addEntityFactory(GameEntityFactory())
+
+        // Test adding some characters!
+        val player1 = spawn("player", SpawnData().put("paint", Color.BLUE))
+        val player2 = spawn("player", SpawnData().put("paint", Color.RED))
+
+        player1.transformComponent.setPosition(100.0, 100.0)
+        player2.transformComponent.setPosition(200.0, 200.0)
+
         wsClient = GameWebsocketClient(URI("ws://localhost:8080/ws"))
         wsClient.connect()
     }
 
     override fun initUI() {
         println("UI is starting")
-    }
-
-    override fun onUpdate(tpf: Double) {
-//        println("Game loop")
     }
 }
 

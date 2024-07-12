@@ -12,6 +12,9 @@ class GameWebsocketClient(serverUri: URI) : WebSocketClient(serverUri) {
 
     override fun onMessage(message: String) {
         println("Received message: $message")
+
+        // Parse the message as JSON:
+        // TODO
     }
 
     override fun onClose(code: Int, reason: String?, remote: Boolean) {
