@@ -2,8 +2,11 @@ package org.mrowrpurr.demo.game
 
 import com.almasb.fxgl.app.GameApplication
 import com.almasb.fxgl.app.GameSettings
+import java.net.URI
 
 class Game : GameApplication() {
+    private lateinit var wsClient: GameWebsocketClient
+
     override fun initSettings(settings: GameSettings) {
         settings.width = 800
         settings.height = 600
@@ -12,6 +15,8 @@ class Game : GameApplication() {
 
     override fun initGame() {
         println("Game is starting")
+        wsClient = GameWebsocketClient(URI("ws://localhost:8080/ws"))
+        wsClient.connect()
     }
 
     override fun initUI() {

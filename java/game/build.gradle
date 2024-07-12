@@ -42,6 +42,9 @@ dependencies {
         exclude(group: 'org.jetbrains.kotlin')
     }
 
+    // https://mvnrepository.com/artifact/org.java-websocket/Java-WebSocket
+    implementation group: 'org.java-websocket', name: 'Java-WebSocket', version: '1.5.7'
+
     testImplementation("org.junit.jupiter:junit-jupiter-api:${junitVersion}")
     testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:${junitVersion}")
 }
