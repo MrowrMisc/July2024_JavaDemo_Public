@@ -36,7 +36,7 @@ class GameEntityFactory : EntityFactory {
 
         return entityBuilder()
             .type(EntityType.PLAYER)
-            .bbox(HitBox(Point2D(5.0, 5.0), BoundingShape.box(10.0, 17.0)))
+            .bbox(HitBox(Point2D(5.0, 5.0), BoundingShape.box(100.0, 100.0)))
 //            .viewWithBBox(playerComponent.rectangle)
             .view(playerComponent.rectangle)
             .with(playerComponent)

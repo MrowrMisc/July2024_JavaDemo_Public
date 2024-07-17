@@ -6,9 +6,14 @@ import com.almasb.fxgl.dsl.*
 import com.almasb.fxgl.entity.Entity
 import com.almasb.fxgl.entity.SpawnData
 import com.almasb.fxgl.input.UserAction
+import javafx.application.Application
 import javafx.application.Platform
+import javafx.scene.Scene
 import javafx.scene.input.KeyCode
+import javafx.scene.layout.StackPane
 import javafx.scene.paint.Color
+import javafx.stage.Stage
+import javafx.stage.StageStyle
 import org.mrowrpurr.demo.game.components.PlayerComponent
 import java.net.URI
 import java.util.UUID
@@ -18,9 +23,9 @@ class Game : GameApplication() {
 //    private lateinit var firstEntity: Entity
 
     override fun initSettings(settings: GameSettings) {
-        settings.width = 800
-        settings.height = 600
-        settings.title = "Hello World"
+        settings.width = 1920
+        settings.height = 1080
+        settings.title = "Demo Game"
     }
 
     override fun initGame() {
@@ -32,7 +37,10 @@ class Game : GameApplication() {
         getPhysicsWorld().setGravity(0.0, 800.0)
         getGameWorld().addEntityFactory(GameEntityFactory())
 
-        wsClient = GameWebsocketClient(URI("ws://localhost:8080/ws"))
+        // TODO HERE HARD CODED :)
+//        wsClient = GameWebsocketClient(URI("ws://localhost:8080/ws"))
+        wsClient = GameWebsocketClient(URI("wss://websocketsagain-n5mpyq257a-uw.a.run.app/ws"))
+
 //        wsClient.registerPlayerActionCallback(::handlePlayerAction)
         wsClient.registerPlayerActionCallback { identifier, action, data ->
             Platform.runLater {
@@ -113,6 +121,29 @@ class Game : GameApplication() {
     }
 }
 
-fun main(args: Array<String>) {
-    GameApplication.launch(Game::class.java, args)
+//fun main(args: Array<String>) {
+//    GameApplication.launch(Game::class.java, args)
+//}
+
+class EmbeddedFXGLApp : Application() {
+    override fun start(primaryStage: Stage) {
+        val gameApp = Game()
+
+        val fxglPane = GameApplication.embeddedLaunch(gameApp)
+        fxglPane.renderFill = Color.TRANSPARENT // Required!
+
+        val root = StackPane(fxglPane)
+        root.style = "-fx-background-color: transparent;" // Required!
+
+        val scene = Scene(root, 1920.0, 1080.0, Color.TRANSPARENT)
+
+        primaryStage.initStyle(StageStyle.TRANSPARENT) // Required!
+        primaryStage.scene = scene
+        primaryStage.show()
+    }
 }
+
+fun main() {
+    Application.launch(EmbeddedFXGLApp::class.java)
+}
+
